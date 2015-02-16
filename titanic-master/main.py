@@ -5,4 +5,6 @@ Created on Mon Feb 16 13:56:16 2015
 @author: user
 """
 
-print "Hi"
+from data_loading import *
+
+get_data('train.csv')
