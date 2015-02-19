@@ -65,6 +65,4 @@ def get_data (path):
     X[X == 'C'] = 1
     X[X == 'Q'] = 2
     
-    # Que faire avec es âges non renseignés ?
-
     return data,X, Y
