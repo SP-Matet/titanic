@@ -47,9 +47,13 @@ def get_data (path):
 #     print data[data.Parch.isnull()].shape
 #     print data[data.Fare.isnull()].shape    
 #==============================================================================
+
+    #Convert string into int
+    data['Gender'] = data['Sex'].map({'female': 0, 'male': 1}).astype(int)
+    data['Embarkader'] = data['Embarked'].map({'S':0, 'C' : 1 , 'Q' : 2}).astype(int)
+    data['CabinRange'] = data['CabinLetter'].map({'A':0, 'C':1, 'B':2, 'E':3, 'D':4, 'G':5, 'F':6, 'T':7, 'Z':8})    
     
     print data.head()
-
     
     Y = data.Survived.values
     del data['Survived']
@@ -57,12 +61,10 @@ def get_data (path):
     del data['Name'] # Pas utile a priori
     del data['Cabin']
     del data['PassengerId']    
+    del data['CabinLetter']
+    del data['Embarked']
+    del data['Sex']
     
     X = data.values
-    X[X == 'male'] = 1
-    X[X == 'female'] = -1
-    X[X == 'S'] = 0
-    X[X == 'C'] = 1
-    X[X == 'Q'] = 2
     
     return data,X, Y
