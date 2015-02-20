@@ -52,9 +52,7 @@ def get_data (path):
     data['Gender'] = data['Sex'].map({'female': 0, 'male': 1}).astype(int)
     data['Embarkader'] = data['Embarked'].map({'S':0, 'C' : 1 , 'Q' : 2}).astype(int)
     data['CabinRange'] = data['CabinLetter'].map({'A':0, 'C':1, 'B':2, 'E':3, 'D':4, 'G':5, 'F':6, 'T':7, 'Z':8})    
-    
-    print data.head()
-    
+        
     Y = data.Survived.values
     del data['Survived']
     del data['Ticket']
