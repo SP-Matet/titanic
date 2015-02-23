@@ -52,9 +52,8 @@ print 'Results on training values :'
 show_results(training_label,train_pred)
 
 
-def make_submission(X,Y):
+def make_submission(X,Y,features,name):
     print'Go for submission'
-    my_idx = [7,4,0,1,6] # selected features
     training_data = X[:,my_idx]
     data_test,X_test,id = get_test_data('test.csv')
     print data_test.head(1)
@@ -70,6 +69,7 @@ def make_submission(X,Y):
     # Copy the results to a pandas dataframe 
     output = pd.DataFrame( data={"PassengerId":id, "Survived":result} )
     # Use pandas to write the comma-separated output file
-    output.to_csv( "first_model.csv", index=False, quoting=3 )
-    
-make_submission(X,Y)
+    output.to_csv( (name +"_model.csv"), index=False, quoting=3 )
+
+all_feats = [0,1,2,3,4,5,6,7,8,9]
+make_submission(X,Y,all_feats,'dumb')
