@@ -31,7 +31,7 @@ def select_feat_IG(X,Y):
     idx = argsort(gain)[::-1]     
     return idx
 
-def show_text_idx(n_times,training_size,n_estimators,X,Y):
+def show_test_idx(n_times,training_size,n_estimators,X,Y):
     idx_chi = select_feat_chi(X,Y)
     idx_IG = select_feat_IG(X,Y)
     my_idx1 = [7,1,0,4,9,8,2,3,6,5]

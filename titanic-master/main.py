@@ -21,7 +21,7 @@ n_times =20
 n_estimators = 20
 
 # show analysis on feature selection / ordering
-show_test_idx(n_times,training_size,n_estimators,X,Y)
+#show_test_idx(n_times,training_size,n_estimators,X,Y)
 
 # split data into training and test sets
 idx = range(0,data.shape[0])
@@ -52,4 +52,24 @@ print 'Results on training values :'
 show_results(training_label,train_pred)
 
 
-
+def make_submission(X,Y):
+    print'Go for submission'
+    my_idx = [7,4,0,1,6] # selected features
+    training_data = X[:,my_idx]
+    data_test,X_test,id = get_test_data('test.csv')
+    print data_test.head(1)
+    print data_test.shape
+    X_test = X_test[:,my_idx]
+    # Create the random forest object 
+    forest = RandomForestClassifier(n_estimators =25)
+    # Fit the training data to the Survived labels and create the decision trees
+    forest = forest.fit(training_data,Y)
+    # Take the same decision trees and run it on the test data
+    result = forest.predict(X_test)
+    print result.shape
+    # Copy the results to a pandas dataframe 
+    output = pd.DataFrame( data={"PassengerId":id, "Survived":result} )
+    # Use pandas to write the comma-separated output file
+    output.to_csv( "first_model.csv", index=False, quoting=3 )
+    
+make_submission(X,Y)
