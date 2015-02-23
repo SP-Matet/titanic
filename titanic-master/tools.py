@@ -7,6 +7,7 @@ Created on Fri Feb 20 09:10:09 2015
 
 from numpy import *
 from math import log
+import string
 import pandas as pd
 
 def show_results(test_label,prediction):
@@ -83,3 +84,34 @@ def infogain(x, y):
         
     return info_gains
     
+    
+def substrings_in_string(big_string, substrings):
+    for substring in substrings:
+        if string.find(big_string, substring) != -1:
+            return substring
+    print big_string
+    return np.nan
+    
+    
+def change_titles(x):
+        title=x['Title']
+        if title in ['Mr','Don', 'Major', 'Capt', 'Jonkheer', 'Rev', 'Col']:
+            return 'Mr'
+        elif title in ['Master']:
+            return 'Master'
+        elif title in ['Countess', 'Mme','Mrs']:
+            return 'Mrs'
+        elif title in ['Mlle', 'Ms','Miss']:
+            return 'Miss'
+        elif title =='Dr':
+            if x['Sex']=='Male':
+                return 'Mr'
+            else:
+                return 'Mrs'
+        elif title =='':
+            if x['Sex']=='Male':
+                return 'Master'
+            else:
+                return 'Miss'
+        else:
+            return title
