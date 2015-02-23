@@ -21,7 +21,7 @@ n_times =20
 n_estimators = 20
 
 # show analysis on feature selection / ordering
-show_text_idx(n_times,training_size,n_estimators,X,Y)
+show_test_idx(n_times,training_size,n_estimators,X,Y)
 
 # split data into training and test sets
 idx = range(0,data.shape[0])
