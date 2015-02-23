@@ -95,6 +95,7 @@ def get_data ():
     data['Gender'] = data['Sex'].map({'female': 0, 'male': 1}).astype(int)
     data['Embarkader'] = data['Embarked'].map({'S':0, 'C' : 1 , 'Q' : 2}).astype(int)
     data['CabinRange'] = data['CabinLetter'].map({'A':0, 'C':1, 'B':2, 'E':3, 'D':4, 'G':5, 'F':6, 'T':7, 'Z':8})    
+    data['MeanFare'] = np.divide(data.Fare, data.SibSp + data.Parch + 1)
     
     Y = data.Survived.values
     del data['Survived']
@@ -105,6 +106,7 @@ def get_data ():
     del data['CabinLetter']
     del data['Embarked']
     del data['Sex']
+    del data['Fare']
     
     X = data.values
     
