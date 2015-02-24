@@ -11,7 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier 
 
-data,X,Y = get_data('train.csv')
+data,X,Y = get_data()
 print data.head(1)
 
 # split data in training and testing sets
@@ -50,7 +50,6 @@ print '\nResults on test values :'
 show_results(test_label,prediction)
 print 'Results on training values :'
 show_results(training_label,train_pred)
-
 
 def make_submission(X,Y,features,name):
     print'Go for submission'
