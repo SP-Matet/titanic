@@ -32,12 +32,12 @@ training_label = Y[idx[:training_size]]
 test_data = X[idx[training_size:],:]
 test_label = Y[idx[training_size:]]
 
-my_idx = [0,1,2,5,6,7,9] # selected features
+my_idx = [0,1,2,5,6,7,8,9] # selected features
 training_data = training_data[:,my_idx]
 test_data = test_data[:,my_idx]
 
 # Create the random forest object 
-forest = RandomForestClassifier(n_estimators =100)
+forest = RandomForestClassifier(n_estimators =25)
 # Fit the training data to the Survived labels and create the decision trees
 forest = forest.fit(training_data,training_label)
 # Take the same decision trees and run it on the test data
