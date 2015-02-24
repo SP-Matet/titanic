@@ -34,9 +34,9 @@ def select_feat_IG(X,Y):
 def show_test_idx(n_times,training_size,n_estimators,X,Y):
     idx_chi = select_feat_chi(X,Y)
     idx_IG = select_feat_IG(X,Y)
-    my_idx1 = [7,1,0,4,9,8,2,3,6,5]
-    my_idx2 = [7,4,0,1,6,2,9,3,8,5]
-    my_idx3 = [7,4,0,2,1,9,6,3,8,5]
+    my_idx1 = [7,4,0,1,6,2,9,3,8,5,10]
+    my_idx2 = [7,10,0,1,6,2,9,3,8,5,4]
+    my_idx3 = [0,1,2,7,10,4,9,6,3,8,5]
     print 'Chi2 :', idx_chi
     print 'IG :', idx_IG
     print 'My idx 1 :', my_idx1

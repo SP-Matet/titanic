@@ -14,6 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 mean_ages = get_mean_ages ()
 data,X,Y = get_data(mean_ages)
 
+print data.shape[1], ' features'
 print data.head(1)
 
 
@@ -23,6 +24,7 @@ n_times =20
 n_estimators = 20
 n_min_samples_split = 10
 
+show_test_idx(n_times,training_size,n_estimators,X,Y)
 
 # split data into training and test sets
 idx = range(0,data.shape[0])
@@ -34,7 +36,7 @@ training_label = Y[idx[:training_size]]
 test_data = X[idx[training_size:],:]
 test_label = Y[idx[training_size:]]
 
-my_idx = [0,1,2,6,9] # selected features
+my_idx = [0,1,2,7,10] # selected features
 training_data = training_data[:,my_idx]
 test_data = test_data[:,my_idx]
 
@@ -54,7 +56,6 @@ print '\n'
 print 'Results on training values :'
 show_results(training_label,train_pred)
 print '\n'
-
 
 
 
@@ -81,4 +82,4 @@ def make_submission(X, Y, features, name, n_min_samples_split):
     output.to_csv( (name +"_model.csv"), index=False, quoting=3 )
 
 
-make_submission(X,Y,my_idx, 'cut_tree_2', n_min_samples_split)
+# make_submission(X,Y,my_idx, 'cut_tree_2', n_min_samples_split)

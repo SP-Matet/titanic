@@ -16,7 +16,7 @@ def get_data (mean_ages):
     data = pd.read_csv('train.csv')
     
     print "Size of the data: ", data.shape
-
+    
     # Treating missing ages
     # Inspired from other sources
     titles=['Mrs', 'Mr', 'Master', 'Miss', 'Major', 'Rev',
@@ -27,6 +27,12 @@ def get_data (mean_ages):
     
     data['AgeWasNull'] = False
     data.loc[(data.Age.isnull()),'AgeWasNull'] = True
+
+    fare_mean1,fare_mean2,fare_mean3 = get_fare_mean(data)
+
+    data.loc[(data.Fare == 0) & (data.Pclass == 1),'Fare'] = fare_mean1
+    data.loc[(data.Fare == 0) & (data.Pclass == 2),'Fare'] = fare_mean2
+    data.loc[(data.Fare == 0) & (data.Pclass == 3),'Fare'] = fare_mean3
     
     # Fill in blanks
     for i in range (data.shape[0]):
@@ -84,7 +90,7 @@ def get_data (mean_ages):
     del data['CabinLetter']
     del data['Embarked']
     del data['Sex']
-    del data['Fare']
+    #del data['Fare']
     
     data
     X = data.values
@@ -106,6 +112,12 @@ def get_test_data (path, mean_ages):
     
     data['AgeWasNull'] = False
     data.loc[(data.Age.isnull()),'AgeWasNull'] = True
+    
+    fare_mean1,fare_mean2,fare_mean3 = get_fare_mean(data)
+
+    data.loc[(data.Fare == 0) & (data.Pclass == 1),'Fare'] = fare_mean1
+    data.loc[(data.Fare == 0) & (data.Pclass == 2),'Fare'] = fare_mean2
+    data.loc[(data.Fare == 0) & (data.Pclass == 3),'Fare'] = fare_mean3
     
     # Fill in blanks
     for i in range (data.shape[0]):
@@ -168,7 +180,7 @@ def get_test_data (path, mean_ages):
     del data['CabinLetter']
     del data['Embarked']
     del data['Sex']
-    del data['Fare']
+    #del data['Fare']
     
     
     X = data.values
@@ -230,3 +242,11 @@ def get_mean_ages ():
     
     print mean_ages
     return mean_ages
+    
+def get_fare_mean(data):
+    fare_mean1 = data.Fare[data.Pclass == 1].mean()
+    fare_mean2 = data.Fare[data.Pclass == 2].mean()
+    fare_mean3 = data.Fare[data.Pclass == 3].mean()
+    
+    return fare_mean1,fare_mean2,fare_mean3
+    
