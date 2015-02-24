@@ -6,6 +6,7 @@ Created on Mon Feb 16 13:56:16 2015
 """
 from data_loading import *
 from preprocessing import *
+from dumb_learner import *
 from numpy import *
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -34,6 +35,15 @@ training_label = Y[idx[:training_size]]
 test_data = X[idx[training_size:],:]
 test_label = Y[idx[training_size:]]
 
+
+survived = dumb_learn(training_data, training_label)
+resultat1 = dumb_predict(test_data, survived)
+resultat2 = dumb_predict(training_data, survived)
+show_results(test_label, resultat1)
+show_results(training_label, resultat2)
+
+print "------------"
+
 my_idx = [0,1,2,6,9] # selected features
 training_data = training_data[:,my_idx]
 test_data = test_data[:,my_idx]
@@ -47,6 +57,8 @@ forest = forest.fit(training_data,training_label)
 # Take the same decision trees and run it on the test data
 prediction = forest.predict(test_data)
 train_pred = forest.predict(training_data)
+
+
 
 print '\nResults on test values :'
 show_results(test_label,prediction)
