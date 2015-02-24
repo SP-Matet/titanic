@@ -9,7 +9,7 @@ Created on Mon Feb 16 14:29:30 2015
 
 from tools import *
 from numpy import *
-from sklearn.ensemble import RandomForestClassifier 
+from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 
 
@@ -43,7 +43,7 @@ def show_test_idx(n_times,training_size,n_estimators,X,Y):
     print 'My idx 2 :', my_idx2
     print 'My idx 3 :', my_idx3
     indexes = [idx_chi,idx_IG,my_idx1,my_idx2,my_idx3]
-    print training_size
+    print "Training size : " + str(training_size)
     res = test_idx_order(n_times,indexes,training_size,n_estimators,X,Y)    
 
     x_axis = range(1,len(indexes[0])+1)
