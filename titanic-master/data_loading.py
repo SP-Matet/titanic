@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 from tools import substrings_in_string
 from tools import change_titles
+from tools import change_titles_to_int
 
 def get_data (mean_ages):
     data = pd.read_csv('train.csv')
@@ -23,6 +24,8 @@ def get_data (mean_ages):
                 'Dr', 'Ms', 'Mlle','Col', 'Capt', 'Mme', 'Countess',
                 'Don', 'Jonkheer']
     data['Title']=data['Name'].map(lambda x: substrings_in_string(x, titles))
+    data['TitleInt']=data['Name'].map(lambda x: substrings_in_string(x, titles))
+    data['TitleInt'] = data.apply(change_titles_to_int, axis=1)
     data['Title'] = data.apply(change_titles, axis=1)
     
     data['AgeWasNull'] = False
@@ -108,6 +111,8 @@ def get_test_data (path, mean_ages):
                 'Dr', 'Ms', 'Mlle','Col', 'Capt', 'Mme', 'Countess',
                 'Don', 'Jonkheer']
     data['Title']=data['Name'].map(lambda x: substrings_in_string(x, titles))
+    data['TitleInt']=data['Name'].map(lambda x: substrings_in_string(x, titles))
+    data['TitleInt'] = data.apply(change_titles_to_int, axis=1)
     data['Title'] = data.apply(change_titles, axis=1)
     
     data['AgeWasNull'] = False

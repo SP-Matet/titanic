@@ -24,7 +24,7 @@ n_times =20
 n_estimators = 20
 n_min_samples_split = 10
 
-show_test_idx(n_times,training_size,n_estimators,X,Y)
+#show_test_idx(n_times,training_size,n_estimators,X,Y)
 
 # split data into training and test sets
 idx = range(0,data.shape[0])
@@ -36,7 +36,7 @@ training_label = Y[idx[:training_size]]
 test_data = X[idx[training_size:],:]
 test_label = Y[idx[training_size:]]
 
-my_idx = [0,1,2,7,10] # selected features
+my_idx = [0,1,2,5,8,11,7] # selected features
 training_data = training_data[:,my_idx]
 test_data = test_data[:,my_idx]
 
