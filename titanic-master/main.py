@@ -4,8 +4,6 @@ Created on Mon Feb 16 13:56:16 2015
 
 @author: user
 """
-
-
 from data_loading import *
 from preprocessing import *
 from numpy import *
