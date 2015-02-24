@@ -33,13 +33,12 @@ training_label = Y[idx[:training_size]]
 test_data = X[idx[training_size:],:]
 test_label = Y[idx[training_size:]]
 
-my_idx = [0,1,2,3,5,6,9] # selected features
-my_idx = [0,1,6]
+my_idx = [0,1,2,6,9] # selected features
 training_data = training_data[:,my_idx]
 test_data = test_data[:,my_idx]
 
 # Create the random forest object 
-forest = RandomForestClassifier(n_estimators =100, max_depth=10, min_samples_split=10)
+forest = RandomForestClassifier(n_estimators =100, min_samples_split=10)
 
 # Fit the training data to the Survived labels and create the decision trees
 forest = forest.fit(training_data,training_label)
@@ -66,7 +65,7 @@ def make_submission(X,Y,features, name):
 
 
     # Create the random forest object
-    forest = RandomForestClassifier(n_estimators =100, max_depth=10, min_samples_split=5)
+    forest = RandomForestClassifier(n_estimators =100, min_samples_split=10)
 
     # Fit the training data to the Survived labels and create the decision trees
     forest = forest.fit(X[:,features],Y)
@@ -81,5 +80,5 @@ def make_submission(X,Y,features, name):
 
 all_feats = [0,1,2,3,4,5,6,7,8,9]
 
-make_submission(X,Y,my_idx, 'cut_tree')
+make_submission(X,Y,my_idx, 'cut_tree_2')
 #make_submission(X,Y,all_feats,'dumb')
