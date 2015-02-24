@@ -12,7 +12,7 @@ import numpy as np
 from tools import substrings_in_string
 from tools import change_titles
 
-def get_data ():
+def get_data (mean_ages):
     data = pd.read_csv('train.csv')
     
     print "Size of the data: ", data.shape
@@ -27,27 +27,6 @@ def get_data ():
     
     data['AgeWasNull'] = False
     data.loc[(data.Age.isnull()),'Age'] = True
-    
-    # Compute mean ages
-    mean_ages = np.zeros(4)
-    count = np.zeros(4)
-    for i in range (data.shape[0]):
-        if (not np.isnan(data.Age[i])):
-            if (data.Title[i] in ['Mr']):
-                mean_ages[0] = mean_ages[0] + data.Age[i]
-                count[0] = count[0] + 1
-            elif (data.Title[i] in ['Mrs']):
-                mean_ages[1] = mean_ages[1] + data.Age[i]
-                count[1] = count[1] + 1
-            elif data.Title[i] in ['Miss']:
-                mean_ages[2] = mean_ages[2] + data.Age[i]
-                count[2] = count[2] + 1
-            elif data.Title[i] in ['Master']:
-                mean_ages[3] = mean_ages[3] + data.Age[i]
-                count[3] = count[3] + 1
-            else:
-                print 'Title not found : ' + data.Title[i]
-    mean_ages = np.divide(mean_ages, count)
     
     # Fill in blanks
     for i in range (data.shape[0]):
@@ -112,9 +91,36 @@ def get_data ():
     
     return data,X, Y
 
-def get_test_data (path):
+def get_test_data (path, mean_ages):
     data = pd.read_csv(path)
     print "Size of the data: ", data.shape
+    
+    # Treating missing ages
+    # Inspired from other sources
+    titles=['Mrs', 'Mr', 'Master', 'Miss', 'Major', 'Rev',
+                'Dr', 'Ms', 'Mlle','Col', 'Capt', 'Mme', 'Countess',
+                'Don', 'Jonkheer']
+    data['Title']=data['Name'].map(lambda x: substrings_in_string(x, titles))
+    data['Title'] = data.apply(change_titles, axis=1)
+    
+    data['AgeWasNull'] = False
+    data.loc[(data.Age.isnull()),'Age'] = True
+    
+    # Fill in blanks
+    for i in range (data.shape[0]):
+        if (np.isnan(data.Age[i])):
+            if (data.Title[i] in ['Mr']):
+                data.Age[i] = mean_ages[0]
+            elif (data.Title[i] in ['Mrs']):
+                data.Age[i] = mean_ages[1]
+            elif data.Title[i] in ['Miss']:
+                data.Age[i] = mean_ages[2]
+            elif data.Title[i] in ['Master']:
+                data.Age[i] = mean_ages[3]
+            else:
+                print 'Title not found : ' + data.Title[i]
+                
+    del data['Title']
 
     #Check that all other field don't have NaN values
     print 'Check null data : Age - Cabin - Embarked - Pclass - Sex - SebSp - Parch - Fare'
@@ -159,7 +165,8 @@ def get_test_data (path):
     data['Gender'] = data['Sex'].map({'female': 0, 'male': 1}).astype(int)
     data['Embarkader'] = data['Embarked'].map({'S':0, 'C' : 1 , 'Q' : 2}).astype(int)
     data['CabinRange'] = data['CabinLetter'].map({'A':0, 'C':1, 'B':2, 'E':3, 'D':4, 'G':5, 'F':6, 'T':7, 'Z':8})    
-        
+    data['MeanFare'] = np.divide(data.Fare, data.SibSp + data.Parch + 1)
+
     id = data.PassengerId.values
     del data['Ticket']
     del data['Name'] # Pas utile a priori
@@ -168,7 +175,63 @@ def get_test_data (path):
     del data['CabinLetter']
     del data['Embarked']
     del data['Sex']
+    del data['Fare']
+    
     
     X = data.values
     
     return data,X, id
+
+
+# Compute mean ages by title from both datasets
+def get_mean_ages ():
+    data1 = pd.read_csv('train.csv')
+    data2 = pd.read_csv('test.csv')
+    
+    titles=['Mrs', 'Mr', 'Master', 'Miss', 'Major', 'Rev',
+                'Dr', 'Ms', 'Mlle','Col', 'Capt', 'Mme', 'Countess',
+                'Don', 'Jonkheer']
+    data1['Title'] = data1['Name'].map(lambda x: substrings_in_string(x, titles))
+    data1['Title'] = data1.apply(change_titles, axis=1)
+    data2['Title'] = data2['Name'].map(lambda x: substrings_in_string(x, titles))
+    data2['Title'] = data2.apply(change_titles, axis=1)
+        
+    # Compute mean ages
+    mean_ages = np.zeros(4)
+    count = np.zeros(4)
+    for i in range (data1.shape[0]):
+        if (not np.isnan(data1.Age[i])):
+            if (data1.Title[i] in ['Mr']):
+                mean_ages[0] = mean_ages[0] + data1.Age[i]
+                count[0] = count[0] + 1
+            elif (data1.Title[i] in ['Mrs']):
+                mean_ages[1] = mean_ages[1] + data1.Age[i]
+                count[1] = count[1] + 1
+            elif data1.Title[i] in ['Miss']:
+                mean_ages[2] = mean_ages[2] + data1.Age[i]
+                count[2] = count[2] + 1
+            elif data1.Title[i] in ['Master']:
+                mean_ages[3] = mean_ages[3] + data1.Age[i]
+                count[3] = count[3] + 1
+            else:
+                print 'Title not found : ' + data1.Title[i]
+                
+    for i in range (data2.shape[0]):
+        if (not np.isnan(data2.Age[i])):
+            if (data2.Title[i] in ['Mr']):
+                mean_ages[0] = mean_ages[0] + data2.Age[i]
+                count[0] = count[0] + 1
+            elif (data2.Title[i] in ['Mrs']):
+                mean_ages[1] = mean_ages[1] + data2.Age[i]
+                count[1] = count[1] + 1
+            elif data2.Title[i] in ['Miss']:
+                mean_ages[2] = mean_ages[2] + data2.Age[i]
+                count[2] = count[2] + 1
+            elif data2.Title[i] in ['Master']:
+                mean_ages[3] = mean_ages[3] + data2.Age[i]
+                count[3] = count[3] + 1
+            else:
+                print 'Title not found : ' + data2.Title[i]
+                
+    mean_ages = np.divide(mean_ages, count)
+    return mean_ages

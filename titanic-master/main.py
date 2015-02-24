@@ -11,7 +11,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier 
 
-data,X,Y = get_data()
+mean_ages = get_mean_ages ()
+data,X,Y = get_data(mean_ages)
 
 print data.head(1)
 
@@ -36,7 +37,7 @@ training_data = training_data[:,my_idx]
 test_data = test_data[:,my_idx]
 
 # Create the random forest object 
-forest = RandomForestClassifier(n_estimators =25)
+forest = RandomForestClassifier(n_estimators =100)
 # Fit the training data to the Survived labels and create the decision trees
 forest = forest.fit(training_data,training_label)
 # Take the same decision trees and run it on the test data
@@ -53,7 +54,7 @@ print '\n'
 def make_submission(X,Y,features,name):
     print'Go for submission'
     training_data = X[:,my_idx]
-    data_test,X_test,id = get_test_data('test.csv')
+    data_test,X_test,id = get_test_data('test.csv', mean_ages)
     print data_test.head(1)
     print data_test.shape
     X_test = X_test[:,my_idx]
