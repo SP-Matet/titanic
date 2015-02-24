@@ -82,4 +82,4 @@ def make_submission(X, Y, features, name, n_min_samples_split):
     output.to_csv( (name +"_model.csv"), index=False, quoting=3 )
 
 
-# make_submission(X,Y,my_idx, 'cut_tree_2', n_min_samples_split)
+make_submission(X,Y,my_idx, 'with_titles', n_min_samples_split)
