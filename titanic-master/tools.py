@@ -18,7 +18,9 @@ def show_results(test_label,prediction):
     ps = pd.Series([tuple(j) for j in z])
     counts = ps.value_counts()
     print counts
-
+    ratio = float((counts[0] + counts[1])) / sum(counts) * 100 # resultat en pourcenage
+    print ratio
+    
 
 # chi square test
 # x: features (data), y: array with the classes
