@@ -48,7 +48,6 @@ def get_data ():
             else:
                 print 'Title not found : ' + data.Title[i]
     mean_ages = np.divide(mean_ages, count)
-    print mean_ages
     
     # Fill in blanks
     for i in range (data.shape[0]):
@@ -108,6 +107,7 @@ def get_data ():
     del data['Sex']
     del data['Fare']
     
+    data
     X = data.values
     
     return data,X, Y

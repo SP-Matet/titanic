@@ -12,10 +12,10 @@ import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier 
 
 data,X,Y = get_data()
+
 print data.head(1)
 
 # split data in training and testing sets
-print data.shape[0]
 training_size = 70*data.shape[0]/100 # 70% for training set
 n_times =20
 n_estimators = 20
@@ -31,12 +31,9 @@ training_label = Y[idx[:training_size]]
 test_data = X[idx[training_size:],:]
 test_label = Y[idx[training_size:]]
 
-my_idx = [7,4,0,1,6] # selected features
+my_idx = [0,1,2,5,6,7,9] # selected features
 training_data = training_data[:,my_idx]
 test_data = test_data[:,my_idx]
-
-print training_data.shape
-print test_data.shape
 
 # Create the random forest object 
 forest = RandomForestClassifier(n_estimators =25)
@@ -48,8 +45,10 @@ train_pred = forest.predict(training_data)
 
 print '\nResults on test values :'
 show_results(test_label,prediction)
+print '\n'
 print 'Results on training values :'
 show_results(training_label,train_pred)
+print '\n'
 
 def make_submission(X,Y,features,name):
     print'Go for submission'
