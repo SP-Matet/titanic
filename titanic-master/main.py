@@ -18,16 +18,17 @@ print data.head(1)
 
 
 # split data in training and testing sets
-training_size = 70*data.shape[0]/100 # 70% for training set
+training_size = abs(70*data.shape[0]/100) # 70% for training set
 n_times =20
 n_estimators = 20
+n_min_samples_split = 10
 
-# show analysis on feature selection / ordering
-#show_test_idx(n_times,training_size,n_estimators,X,Y)
 
 # split data into training and test sets
 idx = range(0,data.shape[0])
+
 random.shuffle(idx)
+
 training_data = X[idx[:training_size],:]
 training_label = Y[idx[:training_size]]
 test_data = X[idx[training_size:],:]
@@ -38,7 +39,7 @@ training_data = training_data[:,my_idx]
 test_data = test_data[:,my_idx]
 
 # Create the random forest object 
-forest = RandomForestClassifier(n_estimators =100, min_samples_split=10)
+forest = RandomForestClassifier(n_estimators =100, min_samples_split=n_min_samples_split)
 
 # Fit the training data to the Survived labels and create the decision trees
 forest = forest.fit(training_data,training_label)
@@ -57,7 +58,7 @@ print '\n'
 
 
 
-def make_submission(X,Y,features, name):
+def make_submission(X, Y, features, name, n_min_samples_split):
     data_test,X_test,id = get_test_data('test.csv', mean_ages)
 
     print data_test.head(1)
@@ -65,20 +66,19 @@ def make_submission(X,Y,features, name):
 
 
     # Create the random forest object
-    forest = RandomForestClassifier(n_estimators =100, min_samples_split=10)
+    forest = RandomForestClassifier(n_estimators=100, min_samples_split=n_min_samples_split)
 
     # Fit the training data to the Survived labels and create the decision trees
-    forest = forest.fit(X[:,features],Y)
+    forest = forest.fit(X[:, features], Y)
 
     # Take the same decision trees and run it on the test data
     result = forest.predict(X_test[:,features])
+
     print result.shape
     # Copy the results to a pandas dataframe 
     output = pd.DataFrame( data={"PassengerId":id, "Survived":result} )
     # Use pandas to write the comma-separated output file
     output.to_csv( (name +"_model.csv"), index=False, quoting=3 )
 
-all_feats = [0,1,2,3,4,5,6,7,8,9]
 
-make_submission(X,Y,my_idx, 'cut_tree_2')
-#make_submission(X,Y,all_feats,'dumb')
+make_submission(X,Y,my_idx, 'cut_tree_2', n_min_samples_split)
