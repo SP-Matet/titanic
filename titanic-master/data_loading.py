@@ -26,7 +26,7 @@ def get_data (mean_ages):
     data['Title'] = data.apply(change_titles, axis=1)
     
     data['AgeWasNull'] = False
-    data.loc[(data.Age.isnull()),'Age'] = True
+    data.loc[(data.Age.isnull()),'AgeWaNull'] = True
     
     # Fill in blanks
     for i in range (data.shape[0]):
@@ -86,7 +86,7 @@ def get_data (mean_ages):
     del data['Sex']
     del data['Fare']
     
-    data
+
     X = data.values
     
     return data,X, Y
@@ -104,7 +104,7 @@ def get_test_data (path, mean_ages):
     data['Title'] = data.apply(change_titles, axis=1)
     
     data['AgeWasNull'] = False
-    data.loc[(data.Age.isnull()),'Age'] = True
+    data.loc[(data.Age.isnull()),'AgeWaNull'] = True
     
     # Fill in blanks
     for i in range (data.shape[0]):
@@ -179,7 +179,8 @@ def get_test_data (path, mean_ages):
     
     
     X = data.values
-    
+    print X
+
     return data,X, id
 
 

@@ -4,6 +4,8 @@ Created on Mon Feb 16 13:56:16 2015
 
 @author: user
 """
+
+
 from data_loading import *
 from preprocessing import *
 from numpy import *
@@ -33,7 +35,8 @@ training_label = Y[idx[:training_size]]
 test_data = X[idx[training_size:],:]
 test_label = Y[idx[training_size:]]
 
-my_idx = [0,1,2,5,6,7,9] # selected features
+my_idx = [0,1,2,3,5,6,9] # selected features
+my_idx = [0,1,6]
 training_data = training_data[:,my_idx]
 test_data = test_data[:,my_idx]
 
@@ -57,13 +60,18 @@ print '\n'
 
 
 
-def make_submission(X,Y,features, name,forest):
-    training_data = X
+def make_submission(X,Y,features, name):
     data_test,X_test,id = get_test_data('test.csv', mean_ages)
 
     print data_test.head(1)
     print data_test.shape
 
+
+    # Create the random forest object
+    forest = RandomForestClassifier(n_estimators =100, max_depth=10, min_samples_split=5)
+
+    # Fit the training data to the Survived labels and create the decision trees
+    forest = forest.fit(X[:,features],Y)
 
     # Take the same decision trees and run it on the test data
     result = forest.predict(X_test[:,features])
@@ -75,30 +83,5 @@ def make_submission(X,Y,features, name,forest):
 
 all_feats = [0,1,2,3,4,5,6,7,8,9]
 
-make_submission(X, Y, my_idx, 'cut_tree', forest)
+make_submission(X,Y,my_idx, 'cut_tree')
 #make_submission(X,Y,all_feats,'dumb')
-
-def antoine_submission(X,Y):
-    print'Submission par Antoine'
-
-    training_data = X
-    data_test,X_test,id = get_test_data('test.csv', mean_ages)
-
-    print data_test.head(1)
-    print data_test.shape
-
-    # Create the random forest object
-    forest = RandomForestClassifier(n_estimators = 100)
-
-    # Fit the training data to the Survived labels and create the decision trees
-
-    forest = forest.fit(training_data,Y)
-    # Take the same decision trees and run it on the test data
-    result = forest.predict(X_test)
-    print result.shape
-    # Copy the results to a pandas dataframe
-    output = pd.DataFrame( data={"PassengerId":id, "Survived":result} )
-    # Use pandas to write the comma-separated output file
-    output.to_csv("antoine_model.csv", index=False, quoting=3)
-
-#antoine_submission(X,Y)
