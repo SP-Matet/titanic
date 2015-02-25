@@ -93,10 +93,6 @@ def test_idx(n_times,index,training_size,k,X,Y):
     results_nullAge = zeros((n_times), dtype=float)
     results_nullFare = zeros((n_times), dtype=float)
     n_min_samples_split = 10    
-    X_nullAge = X[where(X[:,6])]
-    Y_nullAge = Y[where(X[:,6])]
-    X_nullFare = X[where(X[:,7])]
-    Y_nullFare = Y[where(X[:,7])]
     for j in range(n_times):
         idx = range(0,X.shape[0])
         random.shuffle(idx)
@@ -104,6 +100,10 @@ def test_idx(n_times,index,training_size,k,X,Y):
         Y_train = Y[idx[:training_size]]
         X_test = X[idx[training_size:],:]
         Y_test = Y[idx[training_size:]]
+        X_nullAge = X_test[where(X_test[:,6])]
+        Y_nullAge = Y_test[where(X_test[:,6])]
+        X_nullFare = X_test[where(X_test[:,7])]
+        Y_nullFare = Y_test[where(X_test[:,7])]
         # Create the random forest object 
         forest = RandomForestClassifier(n_estimators =k,max_depth =3,max_features = 2, min_samples_split=n_min_samples_split)
         # Fit the training data to the Survived labels and create the decision trees
