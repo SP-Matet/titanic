@@ -25,7 +25,7 @@ print data.head(1)
 training_size = abs(70*data.shape[0]/100) # 70% for training set
 n_times =20
 n_estimators = 25
-n_min_samples_split = 10
+n_min_samples_split = 15
 
 my_idx1 = [12, 5] # selected features
 #my_idx2 = [14, 5,13] # selected features
@@ -80,7 +80,7 @@ def make_submission(X, Y, features, name, n_min_samples_split):
 
 
     # Create the random forest object
-    forest = RandomForestClassifier(n_estimators=25,max_depth =5, max_features = 3, min_samples_split=n_min_samples_split)
+    forest = RandomForestClassifier(n_estimators=25,max_depth =5, max_features = 2, min_samples_split=n_min_samples_split)
 
     # Fit the training data to the Survived labels and create the decision trees
     forest = forest.fit(X[:, features], Y)
