@@ -20,8 +20,8 @@ print data.head(1)
 
 # split data in training and testing sets
 training_size = abs(70*data.shape[0]/100) # 70% for training set
-n_times =20
-n_estimators = 20
+n_times =10
+n_estimators = 50
 n_min_samples_split = 10
 
 #show_test_idx(n_times,training_size,n_estimators,X,Y)
@@ -36,12 +36,14 @@ training_label = Y[idx[:training_size]]
 test_data = X[idx[training_size:],:]
 test_label = Y[idx[training_size:]]
 
-my_idx = [0,1,2,5,8,11,7] # selected features
+my_idx = [8, 11, 5] # selected features
 training_data = training_data[:,my_idx]
 test_data = test_data[:,my_idx]
 
+print 'Test :', my_idx, '\n' , test_idx(n_times,my_idx,training_size,n_estimators,X,Y)
+
 # Create the random forest object 
-forest = RandomForestClassifier(n_estimators =100, min_samples_split=n_min_samples_split)
+forest = RandomForestClassifier(n_estimators =100,max_depth =3, max_features = 2, min_samples_split=n_min_samples_split)
 
 # Fit the training data to the Survived labels and create the decision trees
 forest = forest.fit(training_data,training_label)
@@ -49,6 +51,8 @@ forest = forest.fit(training_data,training_label)
 # Take the same decision trees and run it on the test data
 prediction = forest.predict(test_data)
 train_pred = forest.predict(training_data)
+
+print forest.feature_importances_
 
 print '\nResults on test values :'
 show_results(test_label,prediction)
@@ -67,14 +71,14 @@ def make_submission(X, Y, features, name, n_min_samples_split):
 
 
     # Create the random forest object
-    forest = RandomForestClassifier(n_estimators=100, min_samples_split=n_min_samples_split)
+    forest = RandomForestClassifier(n_estimators=50,max_depth =3, max_features = 2, min_samples_split=n_min_samples_split)
 
     # Fit the training data to the Survived labels and create the decision trees
     forest = forest.fit(X[:, features], Y)
 
     # Take the same decision trees and run it on the test data
     result = forest.predict(X_test[:,features])
-
+    print 'Feature importances : ', forest.feature_importances_
     print result.shape
     # Copy the results to a pandas dataframe 
     output = pd.DataFrame( data={"PassengerId":id, "Survived":result} )
@@ -82,4 +86,4 @@ def make_submission(X, Y, features, name, n_min_samples_split):
     output.to_csv( (name +"_model.csv"), index=False, quoting=3 )
 
 
-make_submission(X,Y,my_idx, 'with_titles', n_min_samples_split)
+make_submission(X,Y,my_idx, 'gender_fare_title', n_min_samples_split)

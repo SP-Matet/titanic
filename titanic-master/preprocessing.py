@@ -36,7 +36,7 @@ def show_test_idx(n_times,training_size,n_estimators,X,Y):
     idx_IG = select_feat_IG(X,Y)
     my_idx1 = [8,4,0,1,7,5,2,10,3,9,6,11]
     my_idx2 = [8,11,0,1,7,5,2,10,3,9,6,4]
-    my_idx3 = [8,11,0,1,7,2,10,3,9,6,4,5]
+    my_idx3 = [5,4,0,1,7,2,10,3,9,6,8,11]
     print 'Chi2 :', idx_chi
     print 'IG :', idx_IG
     print 'My idx 1 :', my_idx1
@@ -60,7 +60,8 @@ def show_test_idx(n_times,training_size,n_estimators,X,Y):
     
 def test_idx_order(n_times,indexes,training_size,k,X,Y):
     nb_idx = len(indexes)
-    results = zeros((nb_idx,n_times,len(indexes[0])), dtype=float)    
+    results = zeros((nb_idx,n_times,len(indexes[0])), dtype=float)
+    n_min_samples_split = 10    
     for j in range(n_times):
         idx = range(0,X.shape[0])
         random.shuffle(idx)
@@ -72,7 +73,7 @@ def test_idx_order(n_times,indexes,training_size,k,X,Y):
             index = indexes[r]
             for n_feat in range(1,len(index)+1):
                 # Create the random forest object 
-                forest = RandomForestClassifier(n_estimators = k)
+                forest = RandomForestClassifier(n_estimators =k,max_depth =5,max_features = 0.5, min_samples_split=n_min_samples_split)
                 # Fit the training data to the Survived labels and create the decision trees
                 forest = forest.fit(X_train[:,index[:n_feat]],Y_train)
                 # Take the same decision trees and run it on the test data
@@ -87,3 +88,26 @@ def test_idx_order(n_times,indexes,training_size,k,X,Y):
         res[i] = mean(results[i],axis=0)
     return res
     
+def test_idx(n_times,index,training_size,k,X,Y):
+    results = zeros((n_times), dtype=float)
+    n_min_samples_split = 10    
+    for j in range(n_times):
+        idx = range(0,X.shape[0])
+        random.shuffle(idx)
+        X_train = X[idx[:training_size],:]
+        Y_train = Y[idx[:training_size]]
+        X_test = X[idx[training_size:],:]
+        Y_test = Y[idx[training_size:]]
+        # Create the random forest object 
+        forest = RandomForestClassifier(n_estimators =k,max_depth =3,max_features = 2, min_samples_split=n_min_samples_split)
+        # Fit the training data to the Survived labels and create the decision trees
+        forest = forest.fit(X_train[:,index],Y_train)
+        # Take the same decision trees and run it on the test data
+        prediction = forest.predict(X_test[:,index])
+        n = 0
+        for i in range(len(prediction)):
+            if( prediction[i] == Y_test[i]):
+                n += 1
+        results[j] = float(n)/len(prediction)
+    res = mean(results,axis=0)
+    return res
