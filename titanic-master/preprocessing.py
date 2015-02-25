@@ -90,7 +90,13 @@ def test_idx_order(n_times,indexes,training_size,k,X,Y):
     
 def test_idx(n_times,index,training_size,k,X,Y):
     results = zeros((n_times), dtype=float)
+    results_nullAge = zeros((n_times), dtype=float)
+    results_nullFare = zeros((n_times), dtype=float)
     n_min_samples_split = 10    
+    X_nullAge = X[where(X[:,6])]
+    Y_nullAge = Y[where(X[:,6])]
+    X_nullFare = X[where(X[:,7])]
+    Y_nullFare = Y[where(X[:,7])]
     for j in range(n_times):
         idx = range(0,X.shape[0])
         random.shuffle(idx)
@@ -104,10 +110,24 @@ def test_idx(n_times,index,training_size,k,X,Y):
         forest = forest.fit(X_train[:,index],Y_train)
         # Take the same decision trees and run it on the test data
         prediction = forest.predict(X_test[:,index])
+        pred_on_null_age = forest.predict(X_nullAge[:,index])
+        pred_on_null_fare = forest.predict(X_nullFare[:,index])
         n = 0
+        m=0
+        s =0
         for i in range(len(prediction)):
             if( prediction[i] == Y_test[i]):
                 n += 1
+        for i in range(len(pred_on_null_age)):
+            if( pred_on_null_age[i] == Y_nullAge[i]):
+                m += 1        
+        for i in range(len(pred_on_null_fare)):
+            if( pred_on_null_fare[i] == Y_nullFare[i]):
+                s += 1                
         results[j] = float(n)/len(prediction)
+        results_nullAge[j] = float(m)/len(pred_on_null_age) 
+        results_nullFare[j] = float(s)/len(pred_on_null_fare) 
     res = mean(results,axis=0)
+    print 'On null ages : ', mean(results_nullAge,axis=0)
+    print 'On null fares : ', mean(results_nullFare,axis=0)
     return res

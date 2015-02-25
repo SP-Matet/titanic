@@ -31,6 +31,9 @@ def get_data (mean_ages):
     data['AgeWasNull'] = False
     data.loc[(data.Age.isnull()),'AgeWasNull'] = True
 
+    data['FareWasNull'] = False
+    data.loc[(data.Fare == 0),'FareWasNull'] = True
+    
     fare_mean1,fare_mean2,fare_mean3 = get_fare_mean(data)
 
     data.loc[(data.Fare == 0) & (data.Pclass == 1),'Fare'] = fare_mean1
