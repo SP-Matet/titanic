@@ -71,9 +71,9 @@ def test_idx_order(n_times,indexes,training_size,k,X,Y):
         Y_test = Y[idx[training_size:]]
         for r in range(len(indexes)):
             index = indexes[r]
-            for n_feat in range(1,len(index)+1):
+            for n_feat in range(2,len(index)+1):
                 # Create the random forest object 
-                forest = RandomForestClassifier(n_estimators =k,max_depth =5,max_features = 0.5, min_samples_split=n_min_samples_split)
+                forest = RandomForestClassifier(n_estimators =k,max_depth =3,max_features = 2, min_samples_split=n_min_samples_split)
                 # Fit the training data to the Survived labels and create the decision trees
                 forest = forest.fit(X_train[:,index[:n_feat]],Y_train)
                 # Take the same decision trees and run it on the test data
@@ -87,6 +87,36 @@ def test_idx_order(n_times,indexes,training_size,k,X,Y):
     for i in range(len(indexes)):
         res[i] = mean(results[i],axis=0)
     return res
+
+def test_idxes(n_times,indexes,training_size,k,X,Y):
+    nb_idx = len(indexes)
+    results = zeros((nb_idx,n_times), dtype=float)
+    n_min_samples_split = 20    
+    for j in range(n_times):
+        idx = range(0,X.shape[0])
+        random.shuffle(idx)
+        X_train = X[idx[:training_size],:]
+        Y_train = Y[idx[:training_size]]
+        X_test = X[idx[training_size:],:]
+        Y_test = Y[idx[training_size:]]
+        for r in range(len(indexes)):
+            index = indexes[r]
+            # Create the random forest object 
+            forest = RandomForestClassifier(n_estimators =k,max_depth =5,max_features = 2, min_samples_split=n_min_samples_split)
+            # Fit the training data to the Survived labels and create the decision trees
+            forest = forest.fit(X_train[:,index],Y_train)
+            # Take the same decision trees and run it on the test data
+            prediction = forest.predict(X_test[:,index])
+            n = 0
+            for i in range(len(prediction)):
+                if( prediction[i] == Y_test[i]):
+                    n += 1
+            results[r][j] = float(n)/len(prediction)
+    res = zeros((nb_idx), dtype=float)        
+    for i in range(len(indexes)):
+        res[i] = mean(results[i],axis=0)
+    return res
+    
     
 def test_idx(n_times,index,training_size,k,X,Y):
     results = zeros((n_times), dtype=float)

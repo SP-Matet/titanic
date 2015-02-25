@@ -86,7 +86,10 @@ def get_data (mean_ages):
     data['Embarkader'] = data['Embarked'].map({'S':0, 'C' : 1 , 'Q' : 2}).astype(int)
     data['CabinRange'] = data['CabinLetter'].map({'A':0, 'C':1, 'B':2, 'E':3, 'D':4, 'G':5, 'F':6, 'T':7, 'Z':8})    
     data['MeanFare'] = np.divide(data.Fare, data.SibSp + data.Parch + 1)
-    
+    data['Family'] = data.SibSp + data.Parch
+    data['MeanFareRounded'] = np.divide(data.MeanFare,10).astype(int)
+    data['CabinSide'] = 3
+
     Y = data.Survived.values
     del data['Survived']
     del data['Ticket']
@@ -120,9 +123,11 @@ def get_test_data (path, mean_ages):
     
     data['AgeWasNull'] = False
     data.loc[(data.Age.isnull()),'AgeWasNull'] = True
+    data['FareWasNull'] = False
+    data.loc[(data.Fare == 0),'FareWasNull'] = True
     
     fare_mean1,fare_mean2,fare_mean3 = get_fare_mean(data)
-
+    
     data.loc[(data.Fare == 0) & (data.Pclass == 1),'Fare'] = fare_mean1
     data.loc[(data.Fare == 0) & (data.Pclass == 2),'Fare'] = fare_mean2
     data.loc[(data.Fare == 0) & (data.Pclass == 3),'Fare'] = fare_mean3
@@ -142,7 +147,7 @@ def get_test_data (path, mean_ages):
                 print 'Title not found : ' + data.Title[i]
                 
     del data['Title']
-
+    
     #Check that all other field don't have NaN values
     print 'Check null data : Age - Cabin - Embarked - Pclass - Sex - SebSp - Parch - Fare'
     print data[data.Age.isnull()].shape
@@ -154,7 +159,7 @@ def get_test_data (path, mean_ages):
     print data[data.Parch.isnull()].shape
     print data[data.Fare.isnull()].shape    
     
-
+    
     # split Cabin column and fill blank rows by Z0
     data['CabinLetter'] = 'Z'
     data['CabinNumber'] = '0'
@@ -173,12 +178,15 @@ def get_test_data (path, mean_ages):
     
     #Fill NaN value    
     data.loc[(data.Fare.isnull()),'Fare'] = 0
-
+    
     #Convert string into int
     data['Gender'] = data['Sex'].map({'female': 0, 'male': 1}).astype(int)
     data['Embarkader'] = data['Embarked'].map({'S':0, 'C' : 1 , 'Q' : 2}).astype(int)
     data['CabinRange'] = data['CabinLetter'].map({'A':0, 'C':1, 'B':2, 'E':3, 'D':4, 'G':5, 'F':6, 'T':7, 'Z':8})    
     data['MeanFare'] = np.divide(data.Fare, data.SibSp + data.Parch + 1)
+    data['Family'] = data.SibSp + data.Parch
+    data['MeanFareRounded'] = np.divide(data.MeanFare,10).astype(int)
+    data['CabinSide'] = 3
 
     id = data.PassengerId.values
     del data['Ticket']
