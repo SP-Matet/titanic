@@ -103,15 +103,15 @@ def change_titles(x):
             return 'Master'
         elif title in ['Countess', 'Mme','Mrs']:
             return 'Mrs'
-        elif title in ['Mlle', 'Ms','Miss']:
+        elif title in ['Mlle','Miss', 'Ms']:
             return 'Miss'
         elif title =='Dr':
-            if x['Sex']=='Male':
+            if x['Sex']=='male':
                 return 'Mr'
             else:
                 return 'Mrs'
         elif title =='':
-            if x['Sex']=='Male':
+            if x['Sex']=='male':
                 return 'Master'
             else:
                 return 'Miss'
@@ -126,15 +126,15 @@ def change_titles_to_int(x):
             return 1
         elif title in ['Countess', 'Mme','Mrs']:
             return 2
-        elif title in ['Mlle', 'Ms','Miss']:
+        elif title in ['Mlle','Miss', 'Ms']:
             return 3
         elif title =='Dr':
-            if x['Sex']=='Male':
+            if x['Sex']=='male':
                 return 0
             else:
                 return 2
         elif title =='':
-            if x['Sex']=='Male':
+            if x['Sex']=='male':
                 return 1
             else:
                 return 3

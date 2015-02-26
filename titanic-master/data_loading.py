@@ -35,7 +35,8 @@ def get_data (mean_ages):
     data.loc[(data.Fare == 0),'FareWasNull'] = True
     
     fare_mean1,fare_mean2,fare_mean3 = get_fare_mean(data)
-
+    mean_fares = [fare_mean1,fare_mean2,fare_mean3]
+    
     data.loc[(data.Fare == 0) & (data.Pclass == 1),'Fare'] = fare_mean1
     data.loc[(data.Fare == 0) & (data.Pclass == 2),'Fare'] = fare_mean2
     data.loc[(data.Fare == 0) & (data.Pclass == 3),'Fare'] = fare_mean3
@@ -89,6 +90,7 @@ def get_data (mean_ages):
     data['Family'] = data.SibSp + data.Parch
     data['MeanFareRounded'] = np.divide(data.MeanFare,10).astype(int)
     data['CabinSide'] = 3
+ 
 
     Y = data.Survived.values
     del data['Survived']
@@ -105,9 +107,9 @@ def get_data (mean_ages):
     X = data.values
     
     
-    return data,X, Y
+    return data,X, Y,mean_fares
 
-def get_test_data (path, mean_ages):
+def get_test_data (path, mean_ages,mean_fares):
     data = pd.read_csv(path)
     print "Size of the data: ", data.shape
     
@@ -126,7 +128,9 @@ def get_test_data (path, mean_ages):
     data['FareWasNull'] = False
     data.loc[(data.Fare == 0),'FareWasNull'] = True
     
-    fare_mean1,fare_mean2,fare_mean3 = get_fare_mean(data)
+    fare_mean1 = mean_fares[0]
+    fare_mean2 = mean_fares[1]
+    fare_mean3 = mean_fares[2]
     
     data.loc[(data.Fare == 0) & (data.Pclass == 1),'Fare'] = fare_mean1
     data.loc[(data.Fare == 0) & (data.Pclass == 2),'Fare'] = fare_mean2

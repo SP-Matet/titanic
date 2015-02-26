@@ -91,7 +91,8 @@ def test_idx_order(n_times,indexes,training_size,k,X,Y):
 def test_idxes(n_times,indexes,training_size,k,X,Y):
     nb_idx = len(indexes)
     results = zeros((nb_idx,n_times), dtype=float)
-    n_min_samples_split = 20    
+    results_on_train = zeros((nb_idx,n_times), dtype=float)
+    n_min_samples_split = 15    
     for j in range(n_times):
         idx = range(0,X.shape[0])
         random.shuffle(idx)
@@ -102,19 +103,28 @@ def test_idxes(n_times,indexes,training_size,k,X,Y):
         for r in range(len(indexes)):
             index = indexes[r]
             # Create the random forest object 
-            forest = RandomForestClassifier(n_estimators =k,max_depth =5,max_features = 2, min_samples_split=n_min_samples_split)
+            forest = RandomForestClassifier(n_estimators =k,max_depth =2,\
+#                max_features = 2, 
+                min_samples_split=n_min_samples_split)
             # Fit the training data to the Survived labels and create the decision trees
             forest = forest.fit(X_train[:,index],Y_train)
             # Take the same decision trees and run it on the test data
             prediction = forest.predict(X_test[:,index])
+            pred_on_train = forest.predict(X_train[:,index])
+            #○print 'Forest wieghts : ', forest.feature_importances_
             n = 0
+            m = 0
             for i in range(len(prediction)):
                 if( prediction[i] == Y_test[i]):
                     n += 1
+            for i in range(len(pred_on_train)):
+                if( pred_on_train[i] == Y_train[i]):
+                    m += 1
             results[r][j] = float(n)/len(prediction)
-    res = zeros((nb_idx), dtype=float)        
+            results_on_train[r][j] = float(m)/len(pred_on_train)
+    res = zeros((nb_idx,2), dtype=float)        
     for i in range(len(indexes)):
-        res[i] = mean(results[i],axis=0)
+        res[i] = [mean(results[i],axis=0) ,mean(results_on_train[i],axis=0)]
     return res
     
     
