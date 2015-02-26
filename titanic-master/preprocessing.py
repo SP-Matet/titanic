@@ -92,7 +92,7 @@ def test_idxes(n_times,indexes,training_size,k,X,Y):
     nb_idx = len(indexes)
     results = zeros((nb_idx,n_times), dtype=float)
     results_on_train = zeros((nb_idx,n_times), dtype=float)
-    n_min_samples_split = 15    
+    n_min_samples_split = 10  
     for j in range(n_times):
         idx = range(0,X.shape[0])
         random.shuffle(idx)
