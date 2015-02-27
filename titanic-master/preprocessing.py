@@ -92,7 +92,7 @@ def test_idxes(n_times,indexes,training_size,k,X,Y):
     nb_idx = len(indexes)
     results = zeros((nb_idx,n_times), dtype=float)
     results_on_train = zeros((nb_idx,n_times), dtype=float)
-    n_min_samples_split = 10  
+    n_min_samples_split = 50  
     for j in range(n_times):
         idx = range(0,X.shape[0])
         random.shuffle(idx)
@@ -103,8 +103,8 @@ def test_idxes(n_times,indexes,training_size,k,X,Y):
         for r in range(len(indexes)):
             index = indexes[r]
             # Create the random forest object 
-            forest = RandomForestClassifier(n_estimators =k,max_depth =2,\
-#                max_features = 2, 
+            forest = RandomForestClassifier(n_estimators =k,max_depth =3,\
+                max_features = 2, 
                 min_samples_split=n_min_samples_split)
             # Fit the training data to the Survived labels and create the decision trees
             forest = forest.fit(X_train[:,index],Y_train)

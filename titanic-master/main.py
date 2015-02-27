@@ -22,51 +22,49 @@ print data.head(1)
        
 # split data in training and testing sets
 training_size = abs(70*data.shape[0]/100) # 70% for training set
-n_times =20
-n_estimators = 20
-n_min_samples_split = 10
+n_times =40
+n_estimators = 5
+n_min_samples_split = 30
 
-my_idx1 = [4, 5] # selected features
+my_idx1 = [12, 5,1] # selected features
 #my_idx2 = [14, 5,13] # selected features
-my_idx2 = [12,5] # selected features
-my_idx3 = [13, 5] # selected features
+my_idx2 = [12,5,13,1] # selected features
+my_idx3 = [13, 5,12] # selected features
 
 #show_test_idx(n_times,training_size,n_estimators,X,Y)
 #print 'Test :', my_idx1, '\n' , test_idx(n_times,my_idx1,training_size,n_estimators,X,Y)
 #print '\nTest :', my_idx2, '\n' , test_idx(n_times,my_idx2,training_size,n_estimators,X,Y)
 print '\nRes : Test - Training \n', test_idxes(n_times,[my_idx1,my_idx2,my_idx3],training_size,n_estimators,X,Y)
 
-#==============================================================================
-# # split data into training and test sets
-# idx = range(0,data.shape[0])
-# random.shuffle(idx)
-# training_data = X[idx[:training_size],:]
-# training_label = Y[idx[:training_size]]
-# test_data = X[idx[training_size:],:]
-# test_label = Y[idx[training_size:]]
-# 
-# training_data = training_data[:,my_idx2]
-# test_data = test_data[:,my_idx2]
-# 
-# # Create the random forest object 
-# forest = RandomForestClassifier(n_estimators =30,max_depth =3, max_features = 2, min_samples_split=n_min_samples_split)
-# 
-# # Fit the training data to the Survived labels and create the decision trees
-# forest = forest.fit(training_data,training_label)
-# 
-# # Take the same decision trees and run it on the test data
-# prediction = forest.predict(test_data)
-# train_pred = forest.predict(training_data)
-# 
-# print forest.feature_importances_
-# 
-# print '\nResults on test values :'
-# show_results(test_label,prediction)
-# print '\n'
-# print 'Results on training values :'
-# show_results(training_label,train_pred)
-# print '\n'
-#==============================================================================
+# split data into training and test sets
+idx = range(0,data.shape[0])
+random.shuffle(idx)
+training_data = X[idx[:training_size],:]
+training_label = Y[idx[:training_size]]
+test_data = X[idx[training_size:],:]
+test_label = Y[idx[training_size:]]
+
+training_data = training_data[:,my_idx2]
+test_data = test_data[:,my_idx2]
+
+# Create the random forest object 
+forest = RandomForestClassifier(n_estimators =5,max_depth =2, max_features = 2, min_samples_split=n_min_samples_split)
+
+# Fit the training data to the Survived labels and create the decision trees
+forest = forest.fit(training_data,training_label)
+
+# Take the same decision trees and run it on the test data
+prediction = forest.predict(test_data)
+train_pred = forest.predict(training_data)
+
+print '\n',forest.feature_importances_
+
+print '\nResults on test values :'
+show_results(test_label,prediction)
+print '\n'
+print 'Results on training values :'
+show_results(training_label,train_pred)
+print '\n'
 
 
 
@@ -82,8 +80,8 @@ def make_submission(X, Y, features, name, n_min_samples_split):
 
 
     # Create the random forest object
-    forest = RandomForestClassifier(n_estimators=30,max_depth =3, 
-                                    #max_features = 2, 
+    forest = RandomForestClassifier(n_estimators=5,max_depth =2, 
+                                    max_features = 2, 
                                     min_samples_split=n_min_samples_split)
 
     # Fit the training data to the Survived labels and create the decision trees
@@ -150,4 +148,4 @@ def make_submission_use_test_set(X, Y, features, name, n_min_samples_split):
     # Use pandas to write the comma-separated output file
     output.to_csv( (name +"_model.csv"), index=False, quoting=3 )
     
-make_submission_use_test_set(X,Y,my_idx2, 'semiSupervised_fare_title', n_min_samples_split)
+make_submission(X,Y,my_idx2,'age_family_fare_title_2', n_min_samples_split)
