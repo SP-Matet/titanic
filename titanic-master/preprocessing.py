@@ -34,15 +34,13 @@ def select_feat_IG(X,Y):
 def show_test_idx(n_times,training_size,n_estimators,X,Y):
     idx_chi = select_feat_chi(X,Y)
     idx_IG = select_feat_IG(X,Y)
-    my_idx1 = [8,4,0,1,7,5,2,10,3,9,6,11]
-    my_idx2 = [8,11,0,1,7,5,2,10,3,9,6,4]
-    my_idx3 = [5,4,0,1,7,2,10,3,9,6,8,11]
+    my_idx1 = [12, 5,13,0,1,9,  8, 11, 14,  2,  3, 10,4,  6,  7, 15]
+    my_idx2 = [2,  3, 10,4,  6,  7, 15,12, 5,13,0,1,9,  8, 11, 14]
     print 'Chi2 :', idx_chi
     print 'IG :', idx_IG
     print 'My idx 1 :', my_idx1
     print 'My idx 2 :', my_idx2
-    print 'My idx 3 :', my_idx3
-    indexes = [idx_chi,idx_IG,my_idx1,my_idx2,my_idx3]
+    indexes = [idx_chi,idx_IG,my_idx1,my_idx2]
     print "Training size : " + str(training_size)
     res = test_idx_order(n_times,indexes,training_size,n_estimators,X,Y)    
 
@@ -53,7 +51,6 @@ def show_test_idx(n_times,training_size,n_estimators,X,Y):
     plt.plot(x_axis,res[1],color='b',linewidth=2.0,label='IG')
     plt.plot(x_axis,res[2],color='y',linewidth=2.0,label='my1')
     plt.plot(x_axis,res[3],color='g',linewidth=2.0,label='my2')
-    plt.plot(x_axis,res[4],color='k',linewidth=2.0,label='my3')
     plt.legend()
     plt.show()
     
@@ -61,7 +58,7 @@ def show_test_idx(n_times,training_size,n_estimators,X,Y):
 def test_idx_order(n_times,indexes,training_size,k,X,Y):
     nb_idx = len(indexes)
     results = zeros((nb_idx,n_times,len(indexes[0])), dtype=float)
-    n_min_samples_split = 10    
+    n_min_samples_split = 30    
     for j in range(n_times):
         idx = range(0,X.shape[0])
         random.shuffle(idx)
@@ -71,9 +68,11 @@ def test_idx_order(n_times,indexes,training_size,k,X,Y):
         Y_test = Y[idx[training_size:]]
         for r in range(len(indexes)):
             index = indexes[r]
-            for n_feat in range(2,len(index)+1):
+            for n_feat in range(1,len(index)+1):
                 # Create the random forest object 
-                forest = RandomForestClassifier(n_estimators =k,max_depth =3,max_features = 2, min_samples_split=n_min_samples_split)
+                forest = RandomForestClassifier(n_estimators =k,max_depth =7,
+                                                #max_features = 2, 
+                                                min_samples_split=n_min_samples_split)
                 # Fit the training data to the Survived labels and create the decision trees
                 forest = forest.fit(X_train[:,index[:n_feat]],Y_train)
                 # Take the same decision trees and run it on the test data

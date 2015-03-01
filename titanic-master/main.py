@@ -19,10 +19,10 @@ for i in where(X[:,11] != 8)[0]:
 print data.shape[1], ' features'
 print data.head(1)
 
-       
+     
 # split data in training and testing sets
 training_size = abs(70*data.shape[0]/100) # 70% for training set
-n_times =100
+n_times =30
 n_estimators = 20
 n_min_samples_split = 50
 
@@ -31,9 +31,10 @@ my_idx2 = [12,5,13] # selected features
 my_idx3 = [4, 5] # selected features
 my_idx4 = [12,5,13,8]
 
+show_test_idx(n_times,training_size,n_estimators,X,Y)
 
 # Variance is computed on the results on test sets
-print '\nResults : Test - Training \n', test_idxes(n_times,[my_idx1,my_idx2,my_idx3],training_size,n_estimators,X,Y)
+print '\nResults : Test - Training \n', test_idxes(n_times,[my_idx1,my_idx2,my_idx3,my_idx4],training_size,n_estimators,X,Y)
 
 # split data into training and test sets
 idx = range(0,data.shape[0])
@@ -93,4 +94,4 @@ def make_submission(X, Y, features, name, n_min_samples_split):
     output.to_csv( (name +"_model.csv"), index=False, quoting=3 )
 
     
-#make_submission(X,Y,my_idx2,'age_family_fare_title_2', n_min_samples_split)
+#make_submission(X,Y,my_idx2,'family_fare_title', n_min_samples_split)
